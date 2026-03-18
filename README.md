@@ -12,12 +12,17 @@ empresa de ingeniería y gestión de proyectos con sede en Córdoba, Argentina.
 ## Estructura
 
 ```
-index.html # Página única con todas las secciones
-LOGO GRILLA NUMERADA.png
-favicon.ico / favicon-*.png
-dario-romero.jpg
-gaston-sanchez-conci.jpg
-leonardo-poldi.jpg
+index.html                        # Página única con todas las secciones
+favicon.ico / favicon-32.png
+images/
+  logo-EPM.png                    # Logo principal + vista previa redes sociales
+  headshots/
+    dario-romero.jpg
+    gaston-sanchez-conci.jpg
+    giuliana-lenarduzzi.jpg
+    leonardo-poldi.jpg
+    marcelo-quaranta.jpg
+    renzo-lenarduzzi.jpg
 ```
 
 ## Deploy
