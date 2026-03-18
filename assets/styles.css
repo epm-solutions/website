@@ -694,11 +694,40 @@ footer p {
 .reveal {
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 1.5rem;
+}
+.lang-switcher a {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+.lang-switcher a.active {
+  color: #fff;
+  background: rgba(255,255,255,0.1);
+}
+.lang-switcher a:hover:not(.active) {
+  color: rgba(255,255,255,0.75);
+}
+.lang-sep {
+  color: rgba(255,255,255,0.2);
+  font-size: 0.7rem;
 }
 
 /* RESPONSIVE */
