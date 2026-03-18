@@ -146,44 +146,56 @@ def compare_structure(a, b, name_a, name_b):
     return issues
 
 
-def should_be_translated(text):
+CLOSE_LANG_PAIRS = {
+    frozenset({"index.html", "index-pt.html"}),
+}
+
+ALWAYS_SKIP = [
+    r"^\(54\)",
+    r"@\w+\.\w+",
+    r"^https?://",
+    r"^linkedin$",
+    r"^(ES|EN|PT)$",
+    r"^EPM\b",
+    r"^(UNC|UCC|UTN|PMI|ITBA|ICDA|EPCM)\b",
+    r"&copy;",
+    r"^Engineering & Project Management$",
+    r"^Project Management$",
+    r"^\d+[\.,]\d+",
+    r"^U\$D\b|^USD\b|^US\$\b",
+    r"^Córdoba,\s*Argentina$",
+]
+
+PERSON_NAMES = [
+    "Darío Romero", "Gastón Sanchez", "Leonardo Poldi",
+    "Giuliana Lenarduzzi", "Renzo Lenarduzzi", "Marcelo Quaranta",
+    "Federico", "Lucio",
+]
+
+
+def should_be_translated(text, close_langs=False):
     """Determina si un texto debería estar traducido entre idiomas."""
     if re.match(r"^[\d\s\.\,\+\$%&@|/()–—\-:]+$", text):
         return False
     if len(text) <= 2:
         return False
-    skip_patterns = [
-        r"^\(54\)",
-        r"@\w+\.\w+",
-        r"^https?://",
-        r"^linkedin$",
-        r"^(ES|EN|PT)$",
-        r"^EPM\b",
-        r"^(UNC|UCC|UTN|PMI|ITBA|ICDA|EPCM)\b",
-        r"&copy;",
-        r"^Engineering & Project Management$",
-        r"^Project Management$",
-        r"^\d+[\.,]\d+",
-        r"^U\$D\b|^USD\b",
-        r"^Córdoba,\s*Argentina$",
-    ]
-    for pat in skip_patterns:
+    for pat in ALWAYS_SKIP:
         if re.search(pat, text, re.IGNORECASE):
             return False
-    person_names = [
-        "Darío Romero", "Gastón Sanchez", "Leonardo Poldi",
-        "Giuliana Lenarduzzi", "Renzo Lenarduzzi", "Marcelo Quaranta",
-        "Federico", "Lucio",
-    ]
-    for name in person_names:
+    for name in PERSON_NAMES:
         if name in text:
             return False
+    # Idiomas cercanos (ES↔PT) comparten muchos cognados cortos
+    if close_langs and len(text) <= 30:
+        return False
     return True
 
 
 def compare_texts(a, b, name_a, name_b):
     """Verifica que ambos archivos tengan textos traducidos y ninguno vacío."""
     issues = []
+    close = frozenset({name_a, name_b}) in CLOSE_LANG_PAIRS
+
     if len(a.texts) != len(b.texts):
         issues.append(
             f"Cantidad de nodos de texto difiere: {name_a} tiene {len(a.texts)}, "
@@ -204,7 +216,7 @@ def compare_texts(a, b, name_a, name_b):
     for i in range(min(min_len, len(a.texts), len(b.texts))):
         ctx_a, text_a = a.texts[i]
         ctx_b, text_b = b.texts[i]
-        if text_a == text_b and should_be_translated(text_a):
+        if text_a == text_b and should_be_translated(text_a, close_langs=close):
             issues.append(
                 f"Texto idéntico (¿falta traducción?): \"{text_a[:70]}\" ({ctx_a})"
             )
