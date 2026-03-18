@@ -13,8 +13,8 @@ empresa de ingeniería y gestión de proyectos con sede en Córdoba, Argentina.
 
 ```
 index.html                        # Página única con todas las secciones
-favicon.ico / favicon-32.png
 images/
+  favicon.ico / favicon-32.png
   logo-EPM.png                    # Logo principal + vista previa redes sociales
   headshots/
     dario-romero.jpg
