@@ -6,6 +6,7 @@ empresa de ingeniería y gestión de proyectos con sede en Córdoba, Argentina.
 ## Stack
 
 - HTML/CSS/JS estático, sin frameworks ni dependencias
+- Validación con **html-proofer** (links, imágenes, anchors)
 - Alojado en **GitHub Pages** (rama `main`, directorio raíz)
 - Dominio personalizado registrado en **NIC.ar**
 
@@ -28,9 +29,9 @@ images/
     renzo-lenarduzzi.jpg
 ```
 
-Todas las rutas a CSS e imágenes son **absolutas** (ej. `/assets/styles.css`,
-`/images/logo-EPM.png`) para funcionar correctamente desde cualquier
-subdirectorio (`/en/`, `/pt/`).
+Todas las rutas a CSS e imágenes son **relativas** (ej. `assets/styles.css`
+desde la raíz, `../assets/styles.css` desde subdirectorios) para funcionar
+correctamente en GitHub Pages sin depender de un dominio fijo.
 
 ## Cómo traducir
 
@@ -62,6 +63,48 @@ python3 .claude/skills/check-i18n-parity/scripts/check_parity.py \
 
 - Exit code `0` = todo sincronizado.
 - Exit code `1` = diferencias encontradas (ver salida para detalles).
+
+## Validación pre-commit
+
+El proyecto incluye un hook de git que valida automáticamente los archivos HTML
+antes de cada commit usando [html-proofer](https://github.com/gjtorikian/html-proofer).
+
+### Setup (una sola vez al clonar)
+
+```bash
+bundle install
+```
+
+Crear el archivo `.git/hooks/pre-commit` con este contenido:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+if git diff --cached --name-only | grep -qE '\.(html|css)$'; then
+  echo "Validando HTML (html-proofer)..."
+  bundle exec ruby bin/validate
+fi
+```
+
+Y hacerlo ejecutable:
+
+```bash
+chmod +x .git/hooks/pre-commit
+```
+
+### Qué verifica
+
+- Imágenes referenciadas en `src` existen en disco
+- Links internos apuntan a archivos reales
+- Anchors (`#contacto`, `#about`, etc.) tienen su `id` correspondiente
+- Scripts y stylesheets referenciados existen
+
+### Ejecución manual
+
+```bash
+bundle exec ruby bin/validate
+```
 
 ## Deploy
 
