@@ -3,7 +3,7 @@
 Verifica paridad estructural y de contenido entre versiones i18n de HTML.
 
 Uso:
-  python3 check_parity.py index.html index-en.html [index-pt.html ...]
+  python3 check_parity.py index.html en/index.html [pt/index.html ...]
 
 Salida: lista de diferencias encontradas, agrupadas por categoría.
 Exit code 0 = sin problemas, 1 = diferencias encontradas.
@@ -147,7 +147,7 @@ def compare_structure(a, b, name_a, name_b):
 
 
 CLOSE_LANG_PAIRS = {
-    frozenset({"index.html", "index-pt.html"}),
+    frozenset({"index.html", "pt/index.html"}),
 }
 
 ALWAYS_SKIP = [
@@ -262,6 +262,18 @@ def compare_stylesheets(a, b, name_a, name_b):
     return issues
 
 
+def _lang_of(name):
+    """Infiere el código de idioma esperado a partir del path del archivo."""
+    p = Path(name)
+    parent = p.parent.name
+    if parent in ("en", "pt", "fr", "de"):
+        return parent
+    # archivo en la raíz → español
+    if parent in (".", ""):
+        return "es"
+    return None
+
+
 def check_internal(parsed, name):
     """Verifica consistencia interna de un archivo."""
     issues = []
@@ -273,12 +285,7 @@ def check_internal(parsed, name):
                 f"(ids existentes: {parsed.section_ids})"
             )
 
-    EXPECTED_LANG = {
-        "index.html": "es",
-        "index-en.html": "en",
-        "index-pt.html": "pt",
-    }
-    expected = EXPECTED_LANG.get(name)
+    expected = _lang_of(name)
     if expected and parsed.lang != expected:
         issues.append(f'<html lang="{parsed.lang}"> debería ser lang="{expected}"')
 
@@ -298,7 +305,7 @@ def main():
         if not path.exists():
             print(f"ERROR: {f} no existe")
             sys.exit(2)
-        parsed[path.name] = parse_file(f)
+        parsed[str(path)] = parse_file(f)
 
     all_issues = {}
 
