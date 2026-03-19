@@ -6,9 +6,17 @@ empresa de ingeniería y gestión de proyectos con sede en Córdoba, Argentina.
 ## Stack
 
 - HTML/CSS/JS estático, sin frameworks ni dependencias
-- Validación con **html-proofer** (links, imágenes, anchors)
 - Alojado en **GitHub Pages** (rama `main`, directorio raíz)
+- DNS gestionados vía **Cloudflare**
 - Dominio personalizado registrado en **NIC.ar**
+- Tests con **html-proofer** (links, imágenes, anchors)
+- Darío Romero es dueño de las cuentas en GitHub y Cloudflare
+
+## Infraestructura DNS / SSL
+
+- Cloudflare en modo DNS-only (nube gris), sin proxy. GitHub Pages maneja SSL
+  directamente con certificado Let's Encrypt
+- Dominio: https://epmsolutions.com.ar (sin `www`)
 
 ## Estructura
 
@@ -64,10 +72,26 @@ python3 .claude/skills/check-i18n-parity/scripts/check_parity.py \
 - Exit code `0` = todo sincronizado.
 - Exit code `1` = diferencias encontradas (ver salida para detalles).
 
-## Validación pre-commit
+## Deploy
 
-El proyecto incluye un hook de git que valida automáticamente los archivos HTML
-antes de cada commit usando [html-proofer](https://github.com/gjtorikian/html-proofer).
+El sitio se publica automáticamente con cada push a `main` vía GitHub Pages,
+con dominio personalizado (NIC.ar).
+
+## Desarrollo local
+
+```bash
+python3 -m http.server 3000
+```
+
+Abrir `http://localhost:3000` para la versión en español,
+`http://localhost:3000/en/` para inglés,
+`http://localhost:3000/pt/` para portugués.
+
+## Tests
+
+El proyecto usa [html-proofer](https://github.com/gjtorikian/html-proofer) para
+validar los archivos HTML. También se ejecuta automáticamente como hook
+pre-commit.
 
 ### Setup (una sola vez al clonar)
 
@@ -105,18 +129,3 @@ chmod +x .git/hooks/pre-commit
 ```bash
 bundle exec ruby bin/validate
 ```
-
-## Deploy
-
-El sitio se publica automáticamente con cada push a `main` vía GitHub Pages,
-con dominio personalizado (NIC.ar).
-
-## Desarrollo local
-
-```bash
-python3 -m http.server 3000
-```
-
-Abrir `http://localhost:3000` para la versión española,
-`http://localhost:3000/en/` para inglés,
-`http://localhost:3000/pt/` para portugués.
