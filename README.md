@@ -1,8 +1,5 @@
 # EPM Solutions — Sitio web
 
-Luego de inmuebles: 5ta caja: riesgos y seguros autocompleto
-Poner telefono y whatsapp
-
 Sitio institucional de **EPM Solutions** (Engineering & Project Management),
 empresa de ingeniería y gestión de proyectos con sede en Córdoba, Argentina.
 
