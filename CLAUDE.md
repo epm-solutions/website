@@ -1,1 +1,2 @@
 **Usar español para todo**: respuestas, commits, comentarios de código y documentación.
+Todos los cambios deben ser aplicados en todos los idiomas

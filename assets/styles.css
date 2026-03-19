@@ -166,7 +166,8 @@ nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
   padding: 8rem 2rem 4rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  grid-template-rows: 1fr auto;
+  gap: 4rem 4rem;
   align-items: center;
 }
 .hero-text { animation: fadeUp 1s ease-out; }
@@ -210,7 +211,22 @@ nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
   max-width: 500px;
   margin-bottom: 2.5rem;
 }
+.hero-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  animation: fadeUp 1s ease-out 0.2s both;
+}
+.hero-logo img {
+  max-width: 340px;
+  width: 100%;
+  filter: drop-shadow(0 20px 60px rgba(0,0,0,0.4));
+  opacity: 0.92;
+}
 .hero-stats {
+  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
@@ -451,7 +467,7 @@ section { padding: 6rem 2rem; }
 .specialties .section-desc { color: rgba(255,255,255,0.6); }
 .spec-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
   margin-top: 3rem;
 }
@@ -733,10 +749,11 @@ footer p {
 /* RESPONSIVE */
 @media (max-width: 1024px) {
   .hero-content { grid-template-columns: 1fr; gap: 3rem; }
-  .hero-stats { grid-template-columns: repeat(3, 1fr); }
+  .hero-logo { order: -1; }
+  .hero-logo img { max-width: 240px; }
+  .hero-stats { grid-column: 1; grid-template-columns: repeat(3, 1fr); }
   .about-grid { grid-template-columns: 1fr; }
   .services-grid { grid-template-columns: repeat(2, 1fr); }
-  .spec-grid { grid-template-columns: repeat(2, 1fr); }
   .team-grid { grid-template-columns: repeat(2, 1fr); }
   .team-card.founder { grid-template-columns: 1fr; }
   .contact .container { grid-template-columns: 1fr; }
@@ -757,6 +774,7 @@ footer p {
     border-bottom: 1px solid rgba(255,255,255,0.08);
   }
   .nav-toggle { display: block; }
+  .hero-logo img { max-width: 180px; }
   .hero-stats { grid-template-columns: 1fr; gap: 1rem; }
   .services-grid { grid-template-columns: 1fr; }
   .spec-grid { grid-template-columns: 1fr; }
