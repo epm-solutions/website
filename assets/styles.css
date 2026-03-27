@@ -512,6 +512,57 @@ section { padding: 6rem 2rem; }
   border-radius: 50%;
 }
 
+/* CLIENTES */
+.clients {
+  background: #fff;
+  position: relative;
+}
+.clients::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(27,79,138,0.12), transparent);
+}
+.clients-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  margin-top: 3rem;
+}
+.client-logo {
+  flex: 0 0 auto;
+  width: 160px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-radius: 12px;
+  background: var(--cloud);
+  border: 1px solid #E8EBF0;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+.client-logo:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(27, 79, 138, 0.1);
+  border-color: rgba(27, 79, 138, 0.2);
+}
+.client-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(100%) opacity(0.6);
+  transition: filter 0.4s;
+}
+.client-logo:hover img {
+  filter: grayscale(0%) opacity(1);
+}
+
 /* EQUIPO */
 .team { background: var(--cloud); }
 .team-grid {
@@ -785,4 +836,6 @@ footer p {
   .method-grid { grid-template-columns: 1fr; }
   .about-highlights { grid-template-columns: 1fr; }
   .services-tabs { flex-wrap: wrap; }
+  .clients-grid { gap: 1.5rem; }
+  .client-logo { width: 130px; height: 80px; padding: 0.75rem; }
 }
