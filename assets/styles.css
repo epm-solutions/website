@@ -527,15 +527,13 @@ section { padding: 6rem 2rem; }
   background: linear-gradient(90deg, transparent, rgba(27,79,138,0.12), transparent);
 }
 .clients-grid {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(4, 160px);
   justify-content: center;
-  flex-wrap: wrap;
   gap: 2.5rem;
   margin-top: 3rem;
 }
 .client-logo {
-  flex: 0 0 auto;
   width: 160px;
   height: 100px;
   display: flex;
@@ -561,6 +559,17 @@ section { padding: 6rem 2rem; }
 }
 .client-logo:hover img {
   filter: grayscale(0%) opacity(1);
+}
+.client-logo--upcoming {
+  border-style: dashed;
+  border-color: #D0D5DD;
+  background: transparent;
+}
+.client-logo--upcoming span {
+  font-size: 0.85rem;
+  color: #9BA3B2;
+  font-style: italic;
+  letter-spacing: 0.02em;
 }
 
 /* EQUIPO */
@@ -836,6 +845,6 @@ footer p {
   .method-grid { grid-template-columns: 1fr; }
   .about-highlights { grid-template-columns: 1fr; }
   .services-tabs { flex-wrap: wrap; }
-  .clients-grid { gap: 1.5rem; }
+  .clients-grid { grid-template-columns: repeat(2, 130px); gap: 1.5rem; }
   .client-logo { width: 130px; height: 80px; padding: 0.75rem; }
 }
