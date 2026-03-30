@@ -6,7 +6,7 @@ empresa de ingeniería y gestión de proyectos con sede en Córdoba, Argentina.
 ## Stack
 
 - HTML/CSS/JS estático, sin frameworks ni dependencias
-- Alojado en **GitHub Pages** (rama `main`, directorio raíz)
+- Alojado en **GitHub Pages** (rama `gh-pages`, directorio raíz)
 - DNS gestionados vía **Cloudflare**
 - Dominio personalizado registrado en **NIC.ar**
 - Tests con **html-proofer** (links, imágenes, anchors)
@@ -75,7 +75,24 @@ python3 .claude/skills/check-i18n-parity/scripts/check_parity.py \
 ## Deploy
 
 El sitio se publica automáticamente con cada push a `main` vía GitHub Pages,
-con dominio personalizado (NIC.ar).
+con dominio personalizado (NIC.ar). El workflow `.github/workflows/deploy.yml`
+copia el contenido de `main` a la rama `gh-pages`, desde donde GitHub Pages lo
+sirve.
+
+## Review apps (previews por PR)
+
+Cada Pull Request despliega automáticamente una copia del sitio en una URL
+propia, permitiendo revisar los cambios sin clonar la rama.
+
+**URL del preview:** `https://epmsolutions.com.ar/pr-preview/pr-[número]/`
+
+El workflow `.github/workflows/preview.yml` se encarga de:
+
+- Desplegar el preview cuando se abre o actualiza un PR
+- Dejar un comentario en el PR con el link directo (incluye QR)
+- Eliminar el preview cuando se cierra el PR
+
+No requiere ninguna acción manual: abrir un PR alcanza.
 
 ## Desarrollo local
 
