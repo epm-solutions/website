@@ -28,7 +28,7 @@ class StructuralParser(HTMLParser):
     def __init__(self):
         super().__init__()
         self.structure = []       # tags normalizados para diff estructural
-        self.texts = []           # (context, text)
+        self.texts = []           # (context, text, is_team_member_h3)
         self.scripts = []         # contenido de <script>
         self.images = []          # src de <img>, en orden
         self.section_ids = []     # id de <section>
@@ -36,6 +36,7 @@ class StructuralParser(HTMLParser):
         self.nav_anchors = []     # hrefs del nav (#nosotros, etc.)
         self.lang = None
         self._tag_stack = []
+        self._div_class_stack = []  # clases de <div> abiertos (para detectar .team-info)
         self._in_skip = None
         self._skip_buf = ""
         self._depth = 0
@@ -68,6 +69,9 @@ class StructuralParser(HTMLParser):
 
         self._tag_stack.append(tag)
 
+        if tag == "div":
+            self._div_class_stack.append(ad.get("class", ""))
+
         if tag == "img" and "src" in ad:
             self.images.append(ad["src"])
         if tag == "section" and "id" in ad:
@@ -93,6 +97,9 @@ class StructuralParser(HTMLParser):
         if tag in self.VOID_ELEMENTS:
             return
 
+        if tag == "div" and self._div_class_stack:
+            self._div_class_stack.pop()
+
         if self._in_skip == tag:
             if tag == "script":
                 self.scripts.append(self._skip_buf.strip())
@@ -113,7 +120,12 @@ class StructuralParser(HTMLParser):
         if self._in_skip:
             self._skip_buf += data
             return
-        self.texts.append((self._context(), text))
+        in_team_member_h3 = (
+            self._tag_stack
+            and self._tag_stack[-1] == "h3"
+            and any("team-info" in c for c in self._div_class_stack)
+        )
+        self.texts.append((self._context(), text, in_team_member_h3))
 
 
 def parse_file(path):
@@ -121,6 +133,21 @@ def parse_file(path):
     parser = StructuralParser()
     parser.feed(content)
     return parser
+
+
+def normalize_relative_url(url: str) -> str:
+    """
+    Misma ruta lógica en la raíz (ES) que en subdirectorios en/pt (href/src con ../).
+    No altera URLs absolutas (http, https, data, etc.).
+    """
+    u = (url or "").strip()
+    if not u:
+        return u
+    if re.match(r"^[a-z][a-z0-9+.-]*:", u, re.I):
+        return u
+    while u.startswith("../"):
+        u = u[3:]
+    return u
 
 
 def compare_structure(a, b, name_a, name_b):
@@ -166,13 +193,6 @@ ALWAYS_SKIP = [
     r"^Córdoba,\s*Argentina$",
 ]
 
-PERSON_NAMES = [
-    "Darío Romero", "Gastón Sanchez", "Leonardo Poldi",
-    "Giuliana Lenarduzzi", "Renzo Lenarduzzi", "Marcelo Quaranta",
-    "Federico", "Lucio",
-]
-
-
 def should_be_translated(text, close_langs=False):
     """Determina si un texto debería estar traducido entre idiomas."""
     if re.match(r"^[\d\s\.\,\+\$%&@|/()–—\-:]+$", text):
@@ -181,9 +201,6 @@ def should_be_translated(text, close_langs=False):
         return False
     for pat in ALWAYS_SKIP:
         if re.search(pat, text, re.IGNORECASE):
-            return False
-    for name in PERSON_NAMES:
-        if name in text:
             return False
     # Idiomas cercanos (ES↔PT) comparten muchos cognados cortos
     if close_langs and len(text) <= 30:
@@ -204,18 +221,21 @@ def compare_texts(a, b, name_a, name_b):
         min_len = min(len(a.texts), len(b.texts))
         if len(a.texts) > len(b.texts):
             for i in range(min_len, len(a.texts)):
-                ctx, txt = a.texts[i]
+                ctx, txt, *_ = a.texts[i]
                 issues.append(f"  Texto extra en {name_a}: \"{txt[:80]}\" ({ctx})")
         else:
             for i in range(min_len, len(b.texts)):
-                ctx, txt = b.texts[i]
+                ctx, txt, *_ = b.texts[i]
                 issues.append(f"  Texto extra en {name_b}: \"{txt[:80]}\" ({ctx})")
     else:
         min_len = len(a.texts)
 
     for i in range(min(min_len, len(a.texts), len(b.texts))):
-        ctx_a, text_a = a.texts[i]
-        ctx_b, text_b = b.texts[i]
+        ctx_a, text_a, team_h3_a = a.texts[i]
+        ctx_b, text_b, team_h3_b = b.texts[i]
+        # Nombres en <h3> dentro de .team-info son propios y no se traducen.
+        if text_a == text_b and team_h3_a and team_h3_b:
+            continue
         if text_a == text_b and should_be_translated(text_a, close_langs=close):
             issues.append(
                 f"Texto idéntico (¿falta traducción?): \"{text_a[:70]}\" ({ctx_a})"
@@ -247,15 +267,19 @@ def compare_images(a, b, name_a, name_b):
             f"{name_b} tiene {len(b.images)}"
         )
     for i, (ia, ib) in enumerate(zip(a.images, b.images)):
-        if ia != ib:
-            issues.append(f"Imagen #{i+1} difiere: {name_a}=\"{ia}\", {name_b}=\"{ib}\"")
+        if normalize_relative_url(ia) != normalize_relative_url(ib):
+            issues.append(
+                f"Imagen #{i+1} difiere: {name_a}=\"{ia}\", {name_b}=\"{ib}\""
+            )
     return issues
 
 
 def compare_stylesheets(a, b, name_a, name_b):
-    """Hojas de estilo referenciadas deben ser idénticas."""
+    """Hojas de estilo referenciadas deben apuntar al mismo recurso (rutas normalizadas)."""
     issues = []
-    if a.stylesheets != b.stylesheets:
+    norm_a = [normalize_relative_url(h) for h in a.stylesheets]
+    norm_b = [normalize_relative_url(h) for h in b.stylesheets]
+    if norm_a != norm_b:
         issues.append(
             f"Stylesheets difieren: {name_a}={a.stylesheets}, {name_b}={b.stylesheets}"
         )
