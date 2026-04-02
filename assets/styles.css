@@ -364,34 +364,15 @@ section { padding: 6rem 2rem; }
 
 /* SERVICIOS */
 .services { background: #fff; }
-.services-tabs {
-  display: flex;
-  gap: 0.5rem;
-  margin: 2.5rem 0 2rem;
-}
-.tab-btn {
-  padding: 0.75rem 1.5rem;
-  border: 2px solid var(--cloud);
-  background: var(--cloud);
-  border-radius: 8px;
-  font-family: var(--sans);
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--stone);
-  cursor: pointer;
-  transition: all 0.25s;
-}
-.tab-btn.active {
-  border-color: var(--navy);
-  background: var(--navy);
-  color: #fff;
-}
-.tab-btn:hover:not(.active) {
-  border-color: var(--navy-light);
+.services-group-title {
+  font-family: var(--serif);
+  font-size: 1.35rem;
   color: var(--navy);
+  margin: 2.5rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--orange);
+  display: inline-block;
 }
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
 .services-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -844,7 +825,6 @@ footer p {
   }
   .method-grid { grid-template-columns: 1fr; }
   .about-highlights { grid-template-columns: 1fr; }
-  .services-tabs { flex-wrap: wrap; }
   .clients-grid { grid-template-columns: repeat(2, 130px); gap: 1.5rem; }
   .client-logo { width: 130px; height: 80px; padding: 0.75rem; }
 }

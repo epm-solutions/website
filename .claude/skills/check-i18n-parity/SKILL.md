@@ -20,20 +20,24 @@ Exit code 0 = todo sincronizado. Exit code 1 = diferencias encontradas.
 ## Qué verifica el script
 
 1. **Estructura HTML**: diff normalizado de la estructura DOM (tags + clases CSS). Detecta nodos extra, faltantes, o en orden distinto.
-2. **Textos**: misma cantidad de nodos de texto, ninguno vacío, y textos que deberían estar traducidos no son idénticos entre idiomas.
+2. **Textos**: misma cantidad de nodos de texto, ninguno vacío, y textos que deberían estar traducidos no son idénticos entre idiomas. Los **nombres del equipo** (`<h3>` dentro de `.team-info`) pueden repetirse entre idiomas.
 3. **Scripts**: bloques `<script>` deben ser idénticos en todos los archivos.
-4. **Imágenes**: mismas referencias `<img src>` en el mismo orden.
-5. **Stylesheets**: mismas hojas de estilo referenciadas.
+4. **Imágenes**: mismos recursos `<img src>` en el mismo orden; las rutas se **normalizan** quitando prefijos `../` para comparar la raíz (ES) con `en/` y `pt/`.
+5. **Stylesheets**: mismas hojas de estilo referenciadas, con la misma normalización de rutas que las imágenes.
 6. **Consistencia interna**: nav anchors apuntan a section IDs existentes, `<html lang>` correcto.
 
-## Diferencias esperadas (filtradas automáticamente)
+## Textos y rutas que no disparan falso positivo
+
+- **Rutas relativas**: `images/...` en la raíz y `../images/...` en subdirectorios cuentan como el mismo recurso (también `assets/styles.css` vs `../assets/styles.css`).
+- **Nombres en fichas del equipo**: el texto del `<h3>` bajo `.team-info` se asume nombre propio y puede coincidir entre idiomas.
+- **Heurística `should_be_translated`**: ignora siglas, URLs, monedas, “Córdoba, Argentina”, términos compartidos EN/PT cortos, etc. (ver `ALWAYS_SKIP` y `CLOSE_LANG_PAIRS` en el script).
+
+## Diferencias estructurales esperadas entre idiomas (no son error)
 
 - `<html lang>` (`es` vs `en` vs `pt`)
 - Clase `active` en el lang-switcher
 - Section IDs (`#nosotros` vs `#about`)
-- `data-tab` attributes (`ingenieria` vs `engineering`)
-- Nombres propios, siglas universitarias, datos de contacto
-- "Project Management", "Engineering & Project Management", "Córdoba, Argentina"
+- Atributos `data-tab` (`ingenieria` vs `engineering`)
 
 ## Flujo de trabajo
 
