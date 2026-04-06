@@ -1,2 +1,3 @@
 - **Usar español para todo**: respuestas, commits, comentarios de código y documentación.
 - Todos los cambios deben ser aplicados en todos los idiomas
+- **Siempre crear un Pull Request** después de hacer push a una rama de feature, apuntando a `main`, con título y descripción en español resumiendo los cambios.
