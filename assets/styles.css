@@ -619,44 +619,6 @@ section { padding: 6rem 2rem; }
   line-height: 1.6;
 }
 
-/* METODOLOGÍA */
-.methodology { background: #fff; }
-.method-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 3rem;
-}
-.method-card {
-  padding: 2rem;
-  border-radius: 14px;
-  border: 1px solid #E8EBF0;
-  position: relative;
-  transition: all 0.3s;
-}
-.method-card:hover {
-  border-color: rgba(27,79,138,0.2);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-}
-.method-num {
-  font-family: var(--serif);
-  font-size: 3rem;
-  color: rgba(27, 79, 138, 0.08);
-  line-height: 1;
-  margin-bottom: 0.5rem;
-}
-.method-card h3 {
-  font-family: var(--serif);
-  font-size: 1.15rem;
-  color: var(--navy-deep);
-  margin-bottom: 0.75rem;
-}
-.method-card p {
-  font-size: 0.875rem;
-  color: var(--stone);
-  line-height: 1.65;
-}
-
 /* CONTACTO */
 .contact {
   background: var(--navy-deep);
