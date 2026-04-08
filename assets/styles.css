@@ -415,7 +415,7 @@ section { padding: 6rem 2rem; }
   margin-bottom: 1.25rem;
   color: var(--navy);
 }
-.service-card h3 {
+.service-card h4 {
   font-family: var(--serif);
   font-size: 1.15rem;
   color: var(--navy-deep);
@@ -619,44 +619,6 @@ section { padding: 6rem 2rem; }
   line-height: 1.6;
 }
 
-/* METODOLOGÍA */
-.methodology { background: #fff; }
-.method-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 3rem;
-}
-.method-card {
-  padding: 2rem;
-  border-radius: 14px;
-  border: 1px solid #E8EBF0;
-  position: relative;
-  transition: all 0.3s;
-}
-.method-card:hover {
-  border-color: rgba(27,79,138,0.2);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-}
-.method-num {
-  font-family: var(--serif);
-  font-size: 3rem;
-  color: rgba(27, 79, 138, 0.08);
-  line-height: 1;
-  margin-bottom: 0.5rem;
-}
-.method-card h3 {
-  font-family: var(--serif);
-  font-size: 1.15rem;
-  color: var(--navy-deep);
-  margin-bottom: 0.75rem;
-}
-.method-card p {
-  font-size: 0.875rem;
-  color: var(--stone);
-  line-height: 1.65;
-}
-
 /* CONTACTO */
 .contact {
   background: var(--navy-deep);
@@ -715,6 +677,7 @@ section { padding: 6rem 2rem; }
   text-align: center;
 }
 .contact-right img {
+  width: auto;
   height: 60px;
   margin-bottom: 1.5rem;
   opacity: 0.9;
@@ -755,35 +718,6 @@ footer p {
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-.lang-switcher {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  margin-left: 1.5rem;
-}
-.lang-switcher a {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.45);
-  text-decoration: none;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  transition: color 0.2s, background 0.2s;
-}
-.lang-switcher a.active {
-  color: #fff;
-  background: rgba(255,255,255,0.1);
-}
-.lang-switcher a:hover:not(.active) {
-  color: rgba(255,255,255,0.75);
-}
-.lang-sep {
-  color: rgba(255,255,255,0.2);
-  font-size: 0.7rem;
 }
 
 /* RESPONSIVE */
