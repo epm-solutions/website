@@ -415,7 +415,7 @@ section { padding: 6rem 2rem; }
   margin-bottom: 1.25rem;
   color: var(--navy);
 }
-.service-card h3 {
+.service-card h4 {
   font-family: var(--serif);
   font-size: 1.15rem;
   color: var(--navy-deep);
