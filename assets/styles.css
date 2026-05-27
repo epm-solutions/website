@@ -221,6 +221,7 @@ nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
 }
 .hero-logo img {
   width: 100%;
+  height: auto;
   filter: drop-shadow(0 20px 60px rgba(0,0,0,0.4));
   opacity: 0.92;
 }
