@@ -29,7 +29,7 @@ images/
   favicon.ico / favicon-32.png
   logo-EPM.png                    # Logo principal + vista previa redes sociales
   headshots/
-    dario-romero.jpg
+    dario-romero.jpeg
     gaston-sanchez-conci.jpg
     giuliana-lenarduzzi.jpg
     leonardo-poldi.jpg
