@@ -47,6 +47,7 @@
       <li><a href="#servicos">Serviços</a></li>
       <li><a href="#especialidades">Especialidades</a></li>
       <li><a href="#clientes">Clientes</a></li>
+      <li><a href="#projetos">Projetos</a></li>
       <li><a href="#equipe">Equipe</a></li>
       <li><a href="#contato">Contato</a></li>
       <li>
@@ -347,6 +348,42 @@
   </div>
 </section>
 
+<!-- PROJETOS -->
+<section class="projects" id="projetos">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Projetos</span>
+      <h2 class="section-title">Nossos projetos</h2>
+      <p class="section-desc">Uma seleção de obras onde aplicamos nossa experiência em gestão integral de projetos de investimento.</p>
+    </div>
+    <div class="projects-list">
+      <article class="project-card reveal">
+        <div class="project-body">
+          <div class="project-meta">
+            <span class="project-tag">Indústria alimentícia</span>
+            <span class="project-tag project-tag--accent">Em execução</span>
+          </div>
+          <h3 class="project-title">Nova planta MAMUSCHKA</h3>
+          <dl class="project-facts">
+            <div><dt>Cliente</dt><dd>Mamushka</dd></div>
+            <div><dt>Localização</dt><dd>Bariloche, Argentina</dd></div>
+            <div><dt>Escopo</dt><dd>Gestão integral</dd></div>
+          </dl>
+          <p class="project-desc">Projeto e gestão integral da nova planta industrial da renomada marca de chocolates artesanais. O escopo abrange obra civil, instalações especiais, equipamentos de produção e comissionamento, garantindo padrões de segurança alimentar e eficiência operacional.</p>
+        </div>
+        <div class="project-gallery" data-gallery="mamushka">
+          <a class="project-photo" href="../images/clients/mamushka.jpeg" data-caption="Nova planta Mamushka">
+            <img src="../images/clients/mamushka.jpeg" alt="Nova planta Mamushka" loading="lazy">
+            <span class="project-photo-overlay" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            </span>
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- EQUIPE -->
 <section class="team" id="equipe">
   <div class="container">
@@ -497,6 +534,16 @@
 <footer>
   <p>&copy; 2026 EPM Solutions. Todos os direitos reservados.</p>
 </footer>
+
+<div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Galeria do projeto">
+  <button class="lightbox-close" type="button" aria-label="Fechar">&times;</button>
+  <button class="lightbox-prev" type="button" aria-label="Anterior">&#8249;</button>
+  <button class="lightbox-next" type="button" aria-label="Próximo">&#8250;</button>
+  <figure class="lightbox-figure">
+    <img id="lightboxImg" src="" alt="">
+    <figcaption id="lightboxCaption" class="lightbox-caption"></figcaption>
+  </figure>
+</div>
 
 <script defer src="../assets/main.js"></script>
 
