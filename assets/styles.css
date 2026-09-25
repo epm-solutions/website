@@ -721,7 +721,10 @@ section { padding: 6rem 2rem; }
   border-radius: 18px;
   overflow: hidden;
   display: grid;
-  grid-template-columns: 1fr 1.1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  grid-template-areas:
+    "body gallery"
+    "video video";
   transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
 }
 .project-card:hover {
@@ -729,11 +732,14 @@ section { padding: 6rem 2rem; }
   border-color: rgba(27, 79, 138, 0.2);
 }
 .project-card:nth-child(even) {
-  grid-template-columns: 1.1fr 1fr;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  grid-template-areas:
+    "gallery body"
+    "video video";
 }
-.project-card:nth-child(even) .project-gallery {
-  order: -1;
-}
+.project-body { grid-area: body; }
+.project-gallery { grid-area: gallery; }
+.project-video { grid-area: video; }
 .project-body {
   padding: 2.5rem;
   display: flex;
@@ -798,12 +804,55 @@ section { padding: 6rem 2rem; }
   color: var(--stone);
   line-height: 1.7;
 }
+.project-desc strong {
+  color: var(--navy-deep);
+  font-weight: 600;
+}
+.project-desc em {
+  font-style: italic;
+  color: var(--navy);
+}
+.project-scope {
+  list-style: none;
+  margin-top: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.project-scope li {
+  position: relative;
+  padding-left: 1.75rem;
+  font-size: 0.9rem;
+  color: var(--stone);
+  line-height: 1.5;
+}
+.project-scope li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 12px;
+  height: 2px;
+  background: var(--orange);
+}
+.project-scope li::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: calc(0.55em - 3px);
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--navy);
+  border-radius: 50%;
+  background: #fff;
+}
 .project-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 4px;
   background: var(--cloud);
   min-height: 320px;
+  align-self: stretch;
 }
 .project-gallery:has(> :only-child) {
   grid-template-columns: 1fr;
@@ -815,6 +864,10 @@ section { padding: 6rem 2rem; }
   aspect-ratio: 4 / 3;
   background: var(--cloud);
   cursor: zoom-in;
+}
+.project-photo--feature {
+  grid-column: span 2;
+  aspect-ratio: 16 / 9;
 }
 .project-photo img {
   width: 100%;
@@ -838,6 +891,64 @@ section { padding: 6rem 2rem; }
 .project-photo:hover .project-photo-overlay {
   background: rgba(14, 46, 82, 0.45);
   color: #fff;
+}
+.project-video {
+  background: var(--navy-deep);
+  color: #fff;
+  padding: 2rem 2.5rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.project-video::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 40% 60% at 90% 10%, rgba(245,166,35,0.08), transparent),
+    radial-gradient(ellipse 50% 60% at 10% 90%, rgba(27,79,138,0.25), transparent);
+  pointer-events: none;
+}
+.project-video-header {
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+.project-video-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 0.4rem;
+}
+.project-video-label::before {
+  content: '';
+  width: 20px;
+  height: 2px;
+  background: var(--orange);
+}
+.project-video-header h4 {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  color: #fff;
+  line-height: 1.2;
+}
+.project-video-wrap {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  background: #000;
+}
+.project-video-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 /* LIGHTBOX */
@@ -982,6 +1093,7 @@ footer p {
   .clients-grid { grid-template-columns: repeat(2, 130px); gap: 1.5rem; }
   .client-logo { width: 130px; height: 80px; padding: 0.75rem; }
   .project-body { padding: 1.75rem; }
+  .project-video { padding: 1.5rem 1.75rem 1.75rem; }
   .lightbox { padding: 1rem; }
   .lightbox-prev { left: 0.5rem; }
   .lightbox-next { right: 0.5rem; }
@@ -989,7 +1101,9 @@ footer p {
 }
 @media (max-width: 1024px) {
   .project-card,
-  .project-card:nth-child(even) { grid-template-columns: 1fr; }
-  .project-card:nth-child(even) .project-gallery { order: 0; }
+  .project-card:nth-child(even) {
+    grid-template-columns: 1fr;
+    grid-template-areas: "body" "gallery" "video";
+  }
   .project-gallery { min-height: 280px; }
 }
