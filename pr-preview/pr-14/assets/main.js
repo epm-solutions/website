@@ -180,6 +180,7 @@ document.querySelectorAll('.project-recording').forEach(rec => {
   const video = rec.querySelector('video');
   if (!video) return;
   const toggle = rec.querySelector('.project-recording-toggle');
+  const playHint = rec.querySelector('[data-recording-play]');
   const fs = rec.querySelector('.project-recording-fullscreen');
 
   function syncPausedClass() {
@@ -190,11 +191,17 @@ document.querySelectorAll('.project-recording').forEach(rec => {
     }
   }
 
-  if (toggle) {
-    toggle.addEventListener('click', () => {
-      if (video.paused) video.play(); else video.pause();
-    });
+  function togglePlay() {
+    if (video.paused) {
+      video.play().then(() => { delete video.dataset.userPaused; }).catch(() => {});
+    } else {
+      video.pause();
+      video.dataset.userPaused = '1';
+    }
   }
+  toggle && toggle.addEventListener('click', togglePlay);
+  playHint && playHint.addEventListener('click', togglePlay);
+
   video.addEventListener('play', syncPausedClass);
   video.addEventListener('pause', syncPausedClass);
 
@@ -211,23 +218,19 @@ document.querySelectorAll('.project-recording').forEach(rec => {
     });
   }
 
+  // Detectar si el autoplay fue bloqueado
+  const attemptAutoplay = () => video.play().catch(() => { syncPausedClass(); });
+
   // Pausar cuando no es visible para no consumir CPU/red
   const io = new IntersectionObserver(([entry]) => {
     if (entry.isIntersecting) {
-      if (video.paused && !video.dataset.userPaused) video.play().catch(() => {});
+      if (video.paused && !video.dataset.userPaused) attemptAutoplay();
     } else if (!video.paused) {
       video.pause();
-      video.dataset.autopaused = '1';
       delete video.dataset.userPaused;
     }
   }, { threshold: 0.15 });
   io.observe(rec);
-
-  // Marcar pausa manual del usuario para no reanudar contra su voluntad
-  toggle && toggle.addEventListener('click', () => {
-    if (!video.paused) video.dataset.userPaused = '1';
-    else delete video.dataset.userPaused;
-  });
 
   syncPausedClass();
 });
