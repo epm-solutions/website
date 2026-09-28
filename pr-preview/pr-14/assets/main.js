@@ -174,3 +174,60 @@ document.querySelectorAll('.project-carousel').forEach(carousel => {
   }, { threshold: 0.25 });
   io.observe(carousel);
 });
+
+// Video de recorrido del proyecto (autoplay silencioso, controles opcionales)
+document.querySelectorAll('.project-recording').forEach(rec => {
+  const video = rec.querySelector('video');
+  if (!video) return;
+  const toggle = rec.querySelector('.project-recording-toggle');
+  const fs = rec.querySelector('.project-recording-fullscreen');
+
+  function syncPausedClass() {
+    rec.classList.toggle('is-paused', video.paused);
+    if (toggle) {
+      const label = video.paused ? toggle.dataset.playLabel : toggle.dataset.pauseLabel;
+      if (label) toggle.setAttribute('aria-label', label);
+    }
+  }
+
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      if (video.paused) video.play(); else video.pause();
+    });
+  }
+  video.addEventListener('play', syncPausedClass);
+  video.addEventListener('pause', syncPausedClass);
+
+  if (fs) {
+    fs.addEventListener('click', () => {
+      const target = document.getElementById(fs.dataset.fullscreenFor) || video;
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else if (target.requestFullscreen) {
+        target.requestFullscreen();
+      } else if (target.webkitEnterFullscreen) {
+        target.webkitEnterFullscreen();
+      }
+    });
+  }
+
+  // Pausar cuando no es visible para no consumir CPU/red
+  const io = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      if (video.paused && !video.dataset.userPaused) video.play().catch(() => {});
+    } else if (!video.paused) {
+      video.pause();
+      video.dataset.autopaused = '1';
+      delete video.dataset.userPaused;
+    }
+  }, { threshold: 0.15 });
+  io.observe(rec);
+
+  // Marcar pausa manual del usuario para no reanudar contra su voluntad
+  toggle && toggle.addEventListener('click', () => {
+    if (!video.paused) video.dataset.userPaused = '1';
+    else delete video.dataset.userPaused;
+  });
+
+  syncPausedClass();
+});
