@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "html-proofer"
+
+# Rechazar paths absolutos que se rompen en GitHub Pages (/website/ prefix).
+# Busca href="/" o src="/algo" pero ignora URLs completas (//cdn.example.com).
+errors = []
+Dir.glob("**/*.html").each do |file|
+  File.readlines(file).each_with_index do |line, i|
+    line.scan(/(?:href|src|action)="(\/(?:[^\/"][^"]*)?)"/).each do |match|
+      errors << "#{file}:#{i + 1}: path absoluto '#{match[0]}' — usar relativo"
+    end
+  end
+end
+
+unless errors.empty?
+  puts "Paths absolutos detectados (se rompen en GitHub Pages):\n\n"
+  errors.each { |e| puts "  #{e}" }
+  puts "\n#{errors.size} path(s) absoluto(s) encontrado(s)."
+  exit 1
+end
+
+options = {
+  checks: %w[Images Links Scripts],
+  disable_external: true,
+  allow_hash_href: true,
+  ignore_urls: [/^tel:/, /^mailto:/],
+  enforce_https: false
+}
+
+proofer = HTMLProofer.check_directory(".", options)
+proofer.run
